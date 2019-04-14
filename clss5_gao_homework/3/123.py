@@ -49,12 +49,12 @@ def cut(tibetan):
         # 判断叠字
         if tibetan_pile:
             if len(tibetan_pile) is 2:
-                if tibetan_pile[1] in ['ྻ', 'ྼ', 'ླ', 'ྺ']:
-                    tibetan_att['基字'], tibetan_att['下加字']= tibetan_pile[0], tibetan_pile[1]
+                if tibetan_pile[1] in ['ྱ', 'ྲ', 'ྭ', 'ླ']:
+                    tibetan_att['基字'], tibetan_att['下加字'] = tibetan_pile[0], tibetan_pile[1]
                 else:
                     tibetan_att['上加字'], tibetan_att['基字'] = tibetan_pile[0], tibetan_pile[1]
             else:
-                if tibetan_pile in ['ཕྱྭ', 'གྲྭ']:
+                if ''.join(tibetan_pile) in ['ཕྱྭ', 'གྲྭ']:
                     tibetan_att['基字'], tibetan_att['下加字'], tibetan_att['再下加字'] = \
                         tibetan_pile[0], tibetan_pile[1], tibetan_pile[2]
                 else:
