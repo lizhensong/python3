@@ -52,15 +52,15 @@ if __name__ == '__main__':
     print('文件读取时间--{}'.format(order_start-program_start))
     t_num = len(Tibetan_dict)
     for i in range(1, t_num):
-        j = k = i
-        while j > 0:
+        j = i
+        key = Tibetan_dict[i]
+        while j > 0 and key['顺序字'] < Tibetan_dict[j-1]['顺序字']:
+            Tibetan_dict[j] = Tibetan_dict[j-1]
             j -= 1
-            if Tibetan_dict[k]['顺序字'] < Tibetan_dict[j]['顺序字']:
-                Tibetan_dict[k], Tibetan_dict[j] = Tibetan_dict[j], Tibetan_dict[k]
-                k = j
+        Tibetan_dict[j] = key
     order_end = time.time()
     print('藏文排序时间--{}'.format(order_end - order_start))
-    with open('./Tibetan_order.txt', 'w', encoding='utf-8') as file:
+    with open('./Tibetan_All.txt', 'w', encoding='utf-8') as file:
         for tibetan in Tibetan_dict:
             file.write(tibetan['原字'] + '\n')
     program_end = time.time()
