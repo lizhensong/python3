@@ -3,7 +3,7 @@ import csv
 
 def cut(tibetan):
         tibetan_len = len(tibetan)
-        tibetan_att = {'原字': tibetan, '前加字': None, '上加字': None, '基字': None, '下加字': None,
+        tibetan_att = {'前加字': None, '上加字': None, '基字': None, '下加字': None,
                        '再下加字': None, '元音': None, '后加字': None, '再后加字': None}
         # 判断叠字，元音
         tibetan_pile = []
@@ -78,14 +78,4 @@ def cut(tibetan):
                 else:
                     tibetan_att['基字'], tibetan_att['后加字'], tibetan_att['再后加字'] = \
                         tibetan[0], tibetan[1], tibetan[2]
-        return [tibetan_att]
-
-
-with open('./Tibetan_All.txt', 'r', encoding='utf-8') as fileR:
-    tibetan_All = fileR.readlines()
-with open('./Tibetan_All_Att.csv', 'w', newline='', encoding='utf-8')as csv_file:
-    tibetan_att_list = ['原字', '前加字', '上加字', '基字', '下加字', '再下加字', '元音', '后加字', '再后加字']
-    writer = csv.DictWriter(csv_file, tibetan_att_list)
-    writer.writeheader()
-    for tibetan_word in tibetan_All:
-        writer.writerows(cut(tibetan_word[:-1]))
+        return tibetan_att

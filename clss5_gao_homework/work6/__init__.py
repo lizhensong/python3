@@ -1,12 +1,14 @@
-import csv
+from clss5_gao_homework.work6.cut import cut
+import math
 import time
 
 
-def read_csv_file_dict(path):
-    with open(path, encoding='utf-8')as csv_file:
-        reader = csv.DictReader(csv_file)
+def read_file_to_dict(path):
+    with open(path, 'r', encoding='utf-8') as fileR:
+        tibetan_all = fileR.readlines()
         tibetan_coding_all = []
-        for data in reader:
+        for tibetan_one in tibetan_all:
+            data = cut(tibetan_one[:-1].strip('﻿'))
             tibetan_value = ''
             if u'\u0F8D' <= data['基字'] <= u'\u0FBD':
                 tibetan_value += chr(ord(data['基字'])-80)
@@ -45,22 +47,38 @@ def read_csv_file_dict(path):
         return tibetan_coding_all
 
 
+def sort(word, left, right):
+    if left < right:
+        middle = math.floor((right+left)/2)
+        sort(word, left, middle)
+        sort(word, middle+1, right)
+        a = word[left:middle+1]
+        b = word[middle+1:right+1]
+        i = j = 0
+        for k in range(left, right+1):
+            if a[i]['顺序字'] < b[j]['顺序字']:
+                word[k] = b[j]
+                j += 1
+            else:
+                word[k] = a[i]
+                i += 1
+            if i > middle - left:
+                word[k + 1:right+1] = b[j:]
+                break
+            if j > right - middle - 1:
+                word[k + 1:right+1] = a[i:]
+                break
+
+
 if __name__ == '__main__':
     program_start = time.time()
-    Tibetan_dict = read_csv_file_dict('./Tibetan_All_Att.csv')
+    Tibetan_dict = read_file_to_dict('./Tibetan_All.txt')
     order_start = time.time()
     print('文件读取时间--{}'.format(order_start-program_start))
-    t_num = len(Tibetan_dict)
-    for i in range(1, t_num):
-        j = i
-        key = Tibetan_dict[i]
-        while j > 0 and key['顺序字'] > Tibetan_dict[j-1]['顺序字']:
-            Tibetan_dict[j] = Tibetan_dict[j-1]
-            j -= 1
-        Tibetan_dict[j] = key
+    sort(Tibetan_dict, 0, len(Tibetan_dict)-1)
     order_end = time.time()
     print('藏文排序时间--{}'.format(order_end - order_start))
-    with open('./Tibetan_All.txt', 'w', encoding='utf-8') as file:
+    with open('./Tibetan_All_order.txt', 'w', encoding='utf-8') as file:
         for tibetan in Tibetan_dict:
             file.write(tibetan['原字'] + '\n')
     program_end = time.time()
